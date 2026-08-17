@@ -37,7 +37,7 @@ jobs:
           # -n : 指定生成的软件名称
           # -i : 指定图标 (需确保仓库根目录有 app.ico)
           # JM_helper.PY : 你的入口文件
-          pyinstaller -F -w -n "Image-to-PDF-Comic-Tag-Organizer" -i app.ico JM_helper.PY
+          pyinstaller -F -w -n "Image-to-PDF-Comic-Tag-Organizer" -i 256X256.ico JM_helper.PY
 
       # 5. 上传产物到 GitHub Releases
       - name: Upload Release Asset
