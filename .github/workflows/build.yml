@@ -1,14 +1,14 @@
-name: Image-to-PDF-Comic-Tag-Organizer EXE
+name: Build EXE (Windows)
 
 on:
   push:
     tags:
-      - 'v*'  # 打标签时触发（推荐）
-  workflow_dispatch:  # 支持手动触发
+      - 'v*' # 当推送 v1.0, v1.1 等标签时触发
+  workflow_dispatch: # 允许手动点击按钮触发
 
 jobs:
   build:
-    runs-on: windows-latest
+    runs-on: windows-latest # 使用 Windows 环境打包
 
     steps:
       # 1. 拉取代码
@@ -19,7 +19,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.10'
+          python-version: '3.10' # 推荐使用稳定的 3.10
 
       # 3. 安装依赖
       - name: Install dependencies
@@ -28,14 +28,22 @@ jobs:
           pip install pyinstaller
           if (Test-Path requirements.txt) { pip install -r requirements.txt }
 
-      # 4. 打包为 EXE
-      - name: Image-to-PDF-Comic-Tag-Organizer EXE
+      # 4. 执行打包命令
+      - name: Build EXE with PyInstaller
         run: |
-          pyinstaller -F -w --clean main.py
+          # 解释：
+          # -F : 打包成单文件
+          # -w : 无控制台黑框 (GUI模式)
+          # -n : 指定生成的软件名称
+          # -i : 指定图标 (需确保仓库根目录有 app.ico)
+          # JM_helper.PY : 你的入口文件
+          pyinstaller -F -w -n "Image-to-PDF-Comic-Tag-Organizer" -i app.ico JM_helper.PY
 
-      # 5. 上传 EXE 到 GitHub Releases
-      - name: Upload to Releases
-        uses: softprops/action-gh-release@v2
+      # 5. 上传产物到 GitHub Releases
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
-          files: dist/*.exe
+          files: dist/Image-to-PDF-Comic-Tag-Organizer.exe
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
