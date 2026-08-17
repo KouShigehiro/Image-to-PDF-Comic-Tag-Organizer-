@@ -1,4 +1,4 @@
-name: Build EXE
+name: Image-to-PDF-Comic-Tag-Organizer EXE
 
 on:
   push:
@@ -29,7 +29,7 @@ jobs:
           if (Test-Path requirements.txt) { pip install -r requirements.txt }
 
       # 4. 打包为 EXE
-      - name: Build EXE
+      - name: Image-to-PDF-Comic-Tag-Organizer EXE
         run: |
           pyinstaller -F -w --clean main.py
 
